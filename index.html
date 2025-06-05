@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Общие стили */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -18,7 +17,7 @@
         }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;   
+            background-color: #f9f9f9; 
             color: #000;
             line-height: 1.4;
             padding: 10px;
@@ -30,7 +29,7 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -65,28 +64,83 @@
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
+
         /* Стили для контейнера привычек */
         .habits-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            position: relative;
         }
+
         .habit-row {
             display: flex;
-            align-items: flex-start;
+            align-items: flex-end;
             position: relative;
-            padding-right: 40px;
         }
+
+        .habit-input {
+            width: 50%;
+            min-height: 20px;
+            resize: none;
+            border: none;
+            border-bottom: 1px solid #000;
+            font-size: 14px;
+            padding: 5px 10px;
+            margin-right: 10px;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .days-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 2px;
+            width: 40%;
+        }
+
+        .day-wrapper {
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .day-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid #000;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .day-checkbox:checked::after {
+            content: "✓";
+            color: #000;
+            font-size: 16px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .day-label {
+            font-size: 10px;
+            text-transform: lowercase;
+        }
+
         .habit-actions {
             position: absolute;
             right: 0;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
             z-index: 10;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            align-items: center;
         }
-        .add-button {
+
+        .add-button-global {
             background-color: rgba(0, 0, 0, 0.2);
             border: none;
             color: white;
@@ -100,15 +154,13 @@
             justify-content: center;
             align-items: center;
             transition: background-color 0.3s ease;
+            flex-shrink: 0;
         }
-        .add-button:hover {
-            background-color: rgba(0, 0, 0, 0.4);
-        }
+
         .popup-menu {
             position: absolute;
             right: 30px;
-            left: auto;
-            top: 30px;
+            top: 0;
             background: white;
             border: 1px solid #ccc;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
@@ -118,6 +170,7 @@
             flex-direction: column;
             z-index: 20;
         }
+
         .popup-menu button {
             padding: 8px 12px;
             border: none;
@@ -126,60 +179,21 @@
             cursor: pointer;
             font-size: 14px;
         }
+
         .popup-menu button:hover {
             background-color: #f0f0f0;
         }
-        .habit-input {
-            width: 50%;
-            min-height: 20px;
-            resize: none;
-            border: none;
-            border-bottom: 1px solid #000;
-            font-size: 14px;
-            padding: 5px 10px;
-            margin-right: 10px;
-            background: transparent;
-            overflow: hidden;
-        }
-        .days-container {
-            width: 50%;
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-        }
-        .day-wrapper {
-            text-align: center;
-        }
-        .day-checkbox {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 1.5px solid #000;
-            cursor: pointer;
-            position: relative;
-        }
-        .day-checkbox:checked::after {
-            content: "✓";
-            color: #000;
-            font-size: 16px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .day-label {
-            font-size: 10px;
-            text-transform: lowercase;
-        }
+
         .goals-container {
             display: flex;
             justify-content: space-between;
             gap: 10px;
         }
+
         .goal-column {
             width: 32%;
         }
+
         .goal-input,
         .step-input,
         .large-input {
@@ -194,28 +208,34 @@
             overflow: hidden;
             text-align: center;
         }
+
         .goal-input {
             min-height: calc(1em * 1.5 * 5);
         }
+
         .step-input {
             min-height: calc(1em * 1.5 * 3);
             border-bottom: 1px dashed #000;
             font-size: 13px;
         }
+
         .note {
             font-style: italic;
             font-size: 13px;
             margin-bottom: 5px;
         }
+
         .divider {
             border-top: 1px solid #000;
             margin: 20px 0;
         }
+
         .footer {
             text-align: center;
             font-size: 12px;
             margin-top: 30px;
         }
+
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -223,6 +243,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+
         .action-button {
             padding: 10px 15px;
             background: #000;
@@ -243,7 +264,7 @@
                 transform: scale(0.6);
                 transform-origin: top left;
                 width: 166.66%;
-                margin-bottom: 50px;
+                margin-bottom: 20px;
             }
 
             .habit-input {
@@ -300,12 +321,37 @@
                         <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit1-sat"><span class="day-label">сб</span></div>
                         <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit1-sun"><span class="day-label">вс</span></div>
                     </div>
-                    <div class="habit-actions">
-                        <button class="add-button" onclick="togglePopupMenu(this)">+</button>
-                        <div class="popup-menu">
-                            <button onclick="addNewHabit()">Добавить привычку</button>
-                            <button id="removeButton" disabled onclick="removeLastHabit()">Удалить привычку</button>
-                        </div>
+                </div>
+                <div class="habit-row" data-habit-id="2">
+                    <textarea class="habit-input" placeholder="Привычка 2" id="habit2"></textarea>
+                    <div class="days-container">
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-mon"><span class="day-label">пн</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-tue"><span class="day-label">вт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-wed"><span class="day-label">ср</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-thu"><span class="day-label">чт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-fri"><span class="day-label">пт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-sat"><span class="day-label">сб</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit2-sun"><span class="day-label">вс</span></div>
+                    </div>
+                </div>
+                <div class="habit-row" data-habit-id="3">
+                    <textarea class="habit-input" placeholder="Привычка 3" id="habit3"></textarea>
+                    <div class="days-container">
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-mon"><span class="day-label">пн</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-tue"><span class="day-label">вт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-wed"><span class="day-label">ср</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-thu"><span class="day-label">чт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-fri"><span class="day-label">пт</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-sat"><span class="day-label">сб</span></div>
+                        <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-sun"><span class="day-label">вс</span></div>
+                    </div>
+                </div>
+
+                <div class="habit-actions" id="habitActions">
+                    <button class="add-button-global" onclick="togglePopupMenu(this)">+</button>
+                    <div class="popup-menu">
+                        <button onclick="addNewHabit()">Добавить привычку</button>
+                        <button id="removeButton" disabled onclick="removeLastHabit()">Удалить привычку</button>
                     </div>
                 </div>
             </div>
@@ -338,6 +384,7 @@
             </div>
         </div>
     </div>
+
     <!-- Вторая страница -->
     <div class="page" id="page2">
         <h2 class="section-title">НАМЕРЕНИЕ:</h2>
@@ -369,7 +416,7 @@
 </div>
 
 <script>
-    let habitCounter = 1;
+    let habitCounter = 3;
 
     function togglePopupMenu(button) {
         const menu = button.nextElementSibling;
@@ -382,8 +429,12 @@
     }
 
     function addNewHabit() {
+        const menu = document.querySelector('.popup-menu');
+        menu.style.display = 'none';
+
         habitCounter++;
         const container = document.getElementById('habitsContainer');
+
         const newHabitRow = document.createElement('div');
         newHabitRow.className = 'habit-row';
         newHabitRow.dataset.habitId = habitCounter;
@@ -399,26 +450,30 @@
                 <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${habitCounter}-sat"><span class="day-label">сб</span></div>
                 <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${habitCounter}-sun"><span class="day-label">вс</span></div>
             </div>
-            <div class="habit-actions">
-                <button class="add-button" onclick="togglePopupMenu(this)">+</button>
-                <div class="popup-menu">
-                    <button onclick="addNewHabit()">Добавить привычку</button>
-                    <button id="removeButton" onclick="removeLastHabit()">Удалить привычку</button>
-                </div>
-            </div>
         `;
 
+        // Удаляем кнопку перед добавлением новой строки
+        const actionsDiv = document.getElementById('habitActions');
+        container.removeChild(actionsDiv);
+
+        // Добавляем новую строку
         container.appendChild(newHabitRow);
         const textarea = newHabitRow.querySelector('.habit-input');
         autoResizeTextarea(textarea);
         textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+
+        // Возвращаем кнопку "+"
+        container.appendChild(actionsDiv);
         updateRemoveButtons();
     }
 
     function removeLastHabit() {
-        if (habitCounter > 1) {
+        const menu = document.querySelector('.popup-menu');
+        menu.style.display = 'none'; // Скрываем меню
+
+        if (habitCounter > 3) {
             const container = document.getElementById('habitsContainer');
-            const lastRow = container.lastElementChild;
+            const lastRow = container.lastElementChild.previousElementSibling;
             container.removeChild(lastRow);
             habitCounter--;
             updateRemoveButtons();
@@ -426,81 +481,46 @@
     }
 
     function updateRemoveButtons() {
-        const buttons = document.querySelectorAll('#removeButton');
-        buttons.forEach(btn => btn.disabled = habitCounter <= 1);
+        const btn = document.getElementById('removeButton');
+        btn.disabled = habitCounter <= 3;
     }
 
-    // Автовысота textarea
     function autoResizeTextarea(textarea) {
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
     }
 
-    function resetTextareaHeight(textarea) {
-        if (textarea.classList.contains('goal-input')) {
-            textarea.style.height = 'calc(1em * 1.5 * 5)';
-        } else if (textarea.classList.contains('step-input')) {
-            textarea.style.height = 'calc(1em * 1.5 * 3)';
-        } else if (textarea.classList.contains('habit-input')) {
-            textarea.style.height = '24px';
-        } else {
-            textarea.style.height = '24px';
-        }
-    }
-
     function setupAutoResize() {
-        const textareas = document.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+        document.querySelectorAll('textarea').forEach(ta => {
+            autoResizeTextarea(ta);
+            ta.addEventListener('input', () => autoResizeTextarea(ta));
         });
     }
 
-    // Сохранение данных
     function saveAllData() {
         document.querySelectorAll('[id]').forEach(el => {
             const value = el.type === 'checkbox' ? el.checked : el.value;
             localStorage.setItem(el.id, value);
         });
+        localStorage.setItem('habitCounter', habitCounter);
     }
 
-    // Очистка данных
     function clearAllData() {
         if (confirm('⚠️ Очистить все данные? Это действие нельзя отменить.')) {
-            const elements = [
-                'dateRange', 'intention', 'reward', 'successes', 'improvements',
-                'habit1', 'habit2', 'habit3',
-                'goal1', 'goal1-step1', 'goal1-step2', 'goal1-step3',
-                'goal2', 'goal2-step1', 'goal2-step2', 'goal2-step3',
-                'goal3', 'goal3-step1', 'goal3-step2', 'goal3-step3',
-                'habit1-mon', 'habit1-tue', 'habit1-wed', 'habit1-thu', 'habit1-fri', 'habit1-sat', 'habit1-sun',
-                'habit2-mon', 'habit2-tue', 'habit2-wed', 'habit2-thu', 'habit2-fri', 'habit2-sat', 'habit2-sun',
-                'habit3-mon', 'habit3-tue', 'habit3-wed', 'habit3-thu', 'habit3-fri', 'habit3-sat', 'habit3-sun'
-            ];
-            elements.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    if (element.type === 'checkbox') {
-                        element.checked = false;
-                    } else {
-                        element.value = '';
-                        resetTextareaHeight(element);
-                        autoResizeTextarea(element);
-                    }
-                    localStorage.removeItem(id);
+            document.querySelectorAll('[id]').forEach(el => {
+                if (el.type === 'checkbox') {
+                    el.checked = false;
+                } else if (el.tagName === 'TEXTAREA' || el.type === 'text') {
+                    el.value = '';
+                    autoResizeTextarea(el);
                 }
+                localStorage.removeItem(el.id);
             });
-
-            // Также очищаем новые привычки, если они были добавлены
-            while (habitCounter > 1) {
-                removeLastHabit();
-            }
 
             setCurrentWeekDates();
         }
     }
 
-    // Установка текущих дат
     function setCurrentWeekDates() {
         const now = new Date();
         const dayOfWeek = now.getDay(); // 0 - воскресенье
@@ -509,57 +529,61 @@
         monday.setDate(now.getDate() + diffToMonday);
         const sunday = new Date(monday);
         sunday.setDate(monday.getDate() + 6);
-        const formatDate = (date) => {
-            return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}`;
-        };
+        const formatDate = date => String(date.getDate()).padStart(2, '0') + '.' + String(date.getMonth() + 1).padStart(2, '0');
         document.getElementById('dateRange').value = `${formatDate(monday)} - ${formatDate(sunday)}`;
     }
 
-    // Загрузка данных
     function loadSavedData() {
-        const elements = [
-            'dateRange', 'intention', 'reward', 'successes', 'improvements',
-            'habit1', 'habit2', 'habit3',
-            'goal1', 'goal1-step1', 'goal1-step2', 'goal1-step3',
-            'goal2', 'goal2-step1', 'goal2-step2', 'goal2-step3',
-            'goal3', 'goal3-step1', 'goal3-step2', 'goal3-step3',
-            'habit1-mon', 'habit1-tue', 'habit1-wed', 'habit1-thu', 'habit1-fri', 'habit1-sat', 'habit1-sun',
-            'habit2-mon', 'habit2-tue', 'habit2-wed', 'habit2-thu', 'habit2-fri', 'habit2-sat', 'habit2-sun',
-            'habit3-mon', 'habit3-tue', 'habit3-wed', 'habit3-thu', 'habit3-fri', 'habit3-sat', 'habit3-sun'
-        ];
-        elements.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                const savedValue = localStorage.getItem(id);
-                if (savedValue !== null) {
-                    if (element.type === 'checkbox') {
-                        element.checked = savedValue === 'true';
-                    } else {
-                        element.value = savedValue;
-                        autoResizeTextarea(element);
-                    }
+        document.querySelectorAll('[id]').forEach(el => {
+            const savedValue = localStorage.getItem(el.id);
+            if (savedValue !== null) {
+                if (el.type === 'checkbox') {
+                    el.checked = savedValue === 'true';
+                } else if (el.tagName === 'TEXTAREA' || el.type === 'text') {
+                    el.value = savedValue;
+                    autoResizeTextarea(el);
                 }
             }
         });
 
-        const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 1;
-        for (let i = 2; i <= storedHabitCount; i++) {
-            addNewHabit();
-        }
+        const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 3;
+        habitCounter = storedHabitCount;
 
-        if (!localStorage.getItem('dateRange')) {
-            setCurrentWeekDates();
+        for (let i = 4; i <= storedHabitCount; i++) {
+            const newHabitRow = document.createElement('div');
+            newHabitRow.className = 'habit-row';
+            newHabitRow.dataset.habitId = i;
+
+            newHabitRow.innerHTML = `
+                <textarea class="habit-input" placeholder="Привычка ${i}" id="habit${i}"></textarea>
+                <div class="days-container">
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-mon"><span class="day-label">пн</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-tue"><span class="day-label">вт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-wed"><span class="day-label">ср</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-thu"><span class="day-label">чт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-fri"><span class="day-label">пт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sat"><span class="day-label">сб</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sun"><span class="day-label">вс</span></div>
+                </div>
+            `;
+
+            const container = document.getElementById('habitsContainer');
+            const actionsDiv = document.getElementById('habitActions');
+            container.removeChild(actionsDiv);
+
+            container.appendChild(newHabitRow);
+            const textarea = newHabitRow.querySelector('.habit-input');
+            autoResizeTextarea(textarea);
+            textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+
+            container.appendChild(actionsDiv);
         }
+        updateRemoveButtons();
     }
 
-    // Экспорт в PDF
     async function exportToPDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
         const pages = [document.getElementById('page1'), document.getElementById('page2')];
         for (const page of pages) {
             await html2canvas(page, { scale: 2 }).then(canvas => {
@@ -573,7 +597,6 @@
         doc.save('Финансовый_план_на_неделю.pdf');
     }
 
-    // Экспорт в PNG
     async function exportToPNG() {
         const buttons = document.querySelector('.action-buttons');
         const originalDisplay = buttons.style.display;
@@ -590,18 +613,20 @@
         buttons.style.display = originalDisplay;
     }
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
         setCurrentWeekDates();
         loadSavedData();
         setupAutoResize();
+
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', saveAllData));
         document.querySelectorAll('textarea, input[type="text"]').forEach(ta => ta.addEventListener('input', saveAllData));
+
         document.getElementById('saveData').addEventListener('click', saveAllData);
         document.getElementById('clearData').addEventListener('click', clearAllData);
         document.getElementById('printData').addEventListener('click', () => window.print());
         document.getElementById('exportPDF').addEventListener('click', exportToPDF);
         document.getElementById('exportPNG').addEventListener('click', exportToPNG);
+        updateRemoveButtons();
     });
 </script>
 </body>
