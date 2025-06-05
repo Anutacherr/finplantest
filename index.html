@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Финансовый план на неделю</title>
-    <!-- Шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Библиотеки -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -17,7 +15,7 @@
         }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9;  
+            background-color: #f9f9f9; 
             color: #000;
             line-height: 1.4;
             padding: 10px;
@@ -29,7 +27,7 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 10px; /* Уменьшено расстояние между листами */
+            margin-bottom: 10px;
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -64,7 +62,6 @@
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
-        /* Стили для контейнера привычек */
         .habits-container {
             display: flex;
             flex-direction: column;
@@ -240,7 +237,7 @@
                 transform: scale(0.6);
                 transform-origin: top left;
                 width: 166.66%;
-                margin-bottom: 10px; /* Также уменьшено для мобильного */
+                margin-bottom: 10px;
                 padding: 10px;
             }
             .habit-input {
@@ -391,7 +388,7 @@
     function togglePopupMenu(button) {
         const menu = button.nextElementSibling;
         menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', e => {
             if (!menu.contains(e.target) && e.target !== button) {
                 menu.style.display = 'none';
             }
@@ -431,7 +428,7 @@
 
     function removeLastHabit() {
         const menu = document.querySelector('.popup-menu');
-        menu.style.display = 'none'; // Скрываем меню
+        menu.style.display = 'none';
         if (habitCounter > 3) {
             const container = document.getElementById('habitsContainer');
             const lastRow = container.lastElementChild.previousElementSibling;
@@ -503,7 +500,7 @@
 
     function setCurrentWeekDates() {
         const now = new Date();
-        const dayOfWeek = now.getDay(); // 0 - воскресенье
+        const dayOfWeek = now.getDay();
         const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
         const monday = new Date(now);
         monday.setDate(now.getDate() + diffToMonday);
@@ -534,7 +531,6 @@
 
         for (let i = 4; i <= storedHabitCount; i++) {
             if (localStorage.getItem(`habit${i}`) === null) continue;
-
             const newHabitRow = document.createElement('div');
             newHabitRow.className = 'habit-row';
             newHabitRow.dataset.habitId = i;
@@ -561,38 +557,40 @@
         updateRemoveButtons();
     }
 
-    async function exportToPDF() {
+    function exportToPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
         const pages = [document.getElementById('page1'), document.getElementById('page2')];
-        for (const page of pages) {
-            await html2canvas(page, { scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 210;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                if (page.id !== 'page2') doc.addPage();
-            });
-        }
-        doc.save('Финансовый_план_на_неделю.pdf');
+        (async () => {
+            for (const page of pages) {
+                await html2canvas(page, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = 210;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    if (page.id !== 'page2') doc.addPage();
+                });
+            }
+            doc.save('Финансовый_план_на_неделю.pdf');
+        })();
     }
 
-    async function exportToPNG() {
+    function exportToPNG() {
         const buttons = document.querySelector('.action-buttons');
         const originalDisplay = buttons.style.display;
         buttons.style.display = 'none';
-
         const pages = [document.getElementById('page1'), document.getElementById('page2')];
-        for (const page of pages) {
-            await html2canvas(page, { scale: 2 }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `${page.id}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        buttons.style.display = originalDisplay;
+        (async () => {
+            for (const page of pages) {
+                await html2canvas(page, { scale: 2 }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `${page.id}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                });
+            }
+            buttons.style.display = originalDisplay;
+        })();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
