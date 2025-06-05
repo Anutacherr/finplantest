@@ -17,7 +17,7 @@
         }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9; 
+            background-color: #f9f9f9;  
             color: #000;
             line-height: 1.4;
             padding: 10px;
@@ -29,7 +29,7 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Уменьшено расстояние между листами */
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -64,7 +64,6 @@
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
-
         /* Стили для контейнера привычек */
         .habits-container {
             display: flex;
@@ -72,13 +71,11 @@
             gap: 15px;
             position: relative;
         }
-
         .habit-row {
             display: flex;
             align-items: flex-end;
             position: relative;
         }
-
         .habit-input {
             width: 50%;
             min-height: 20px;
@@ -91,19 +88,16 @@
             background: transparent;
             overflow: hidden;
         }
-
         .days-container {
             display: flex;
             justify-content: space-between;
             gap: 2px;
             width: 40%;
         }
-
         .day-wrapper {
             text-align: center;
             flex-shrink: 0;
         }
-
         .day-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -113,7 +107,6 @@
             cursor: pointer;
             position: relative;
         }
-
         .day-checkbox:checked::after {
             content: "✓";
             color: #000;
@@ -123,12 +116,10 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
         .day-label {
             font-size: 10px;
             text-transform: lowercase;
         }
-
         .habit-actions {
             position: absolute;
             right: 0;
@@ -139,7 +130,6 @@
             flex-direction: column;
             align-items: center;
         }
-
         .add-button-global {
             background-color: rgba(0, 0, 0, 0.2);
             border: none;
@@ -156,7 +146,6 @@
             transition: background-color 0.3s ease;
             flex-shrink: 0;
         }
-
         .popup-menu {
             position: absolute;
             right: 30px;
@@ -170,7 +159,6 @@
             flex-direction: column;
             z-index: 20;
         }
-
         .popup-menu button {
             padding: 8px 12px;
             border: none;
@@ -179,21 +167,17 @@
             cursor: pointer;
             font-size: 14px;
         }
-
         .popup-menu button:hover {
             background-color: #f0f0f0;
         }
-
         .goals-container {
             display: flex;
             justify-content: space-between;
             gap: 10px;
         }
-
         .goal-column {
             width: 32%;
         }
-
         .goal-input,
         .step-input,
         .large-input {
@@ -208,34 +192,28 @@
             overflow: hidden;
             text-align: center;
         }
-
         .goal-input {
             min-height: calc(1em * 1.5 * 5);
         }
-
         .step-input {
             min-height: calc(1em * 1.5 * 3);
             border-bottom: 1px dashed #000;
             font-size: 13px;
         }
-
         .note {
             font-style: italic;
             font-size: 13px;
             margin-bottom: 5px;
         }
-
         .divider {
             border-top: 1px solid #000;
             margin: 20px 0;
         }
-
         .footer {
             text-align: center;
             font-size: 12px;
             margin-top: 30px;
         }
-
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -243,7 +221,6 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .action-button {
             padding: 10px 15px;
             background: #000;
@@ -258,35 +235,30 @@
             min-width: 120px;
             text-align: center;
         }
-
         @media (max-width: 768px) {
             .page {
                 transform: scale(0.6);
                 transform-origin: top left;
                 width: 166.66%;
-                margin-bottom: 20px;
+                margin-bottom: 10px; /* Также уменьшено для мобильного */
+                padding: 10px;
             }
-
             .habit-input {
                 font-size: 12px;
             }
-
             .day-checkbox {
                 width: 16px;
                 height: 16px;
             }
-
             .day-label {
                 font-size: 9px;
             }
-
             .goal-input,
             .step-input,
             .large-input {
                 font-size: 12px;
             }
         }
-
         @media print {
             .action-buttons { display: none; }
             .page {
@@ -346,7 +318,6 @@
                         <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit3-sun"><span class="day-label">вс</span></div>
                     </div>
                 </div>
-
                 <div class="habit-actions" id="habitActions">
                     <button class="add-button-global" onclick="togglePopupMenu(this)">+</button>
                     <div class="popup-menu">
@@ -384,7 +355,6 @@
             </div>
         </div>
     </div>
-
     <!-- Вторая страница -->
     <div class="page" id="page2">
         <h2 class="section-title">НАМЕРЕНИЕ:</h2>
@@ -431,14 +401,11 @@
     function addNewHabit() {
         const menu = document.querySelector('.popup-menu');
         menu.style.display = 'none';
-
         habitCounter++;
         const container = document.getElementById('habitsContainer');
-
         const newHabitRow = document.createElement('div');
         newHabitRow.className = 'habit-row';
         newHabitRow.dataset.habitId = habitCounter;
-
         newHabitRow.innerHTML = `
             <textarea class="habit-input" placeholder="Привычка ${habitCounter}" id="habit${habitCounter}"></textarea>
             <div class="days-container">
@@ -451,38 +418,52 @@
                 <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${habitCounter}-sun"><span class="day-label">вс</span></div>
             </div>
         `;
-
-        // Удаляем кнопку перед добавлением новой строки
         const actionsDiv = document.getElementById('habitActions');
         container.removeChild(actionsDiv);
-
-        // Добавляем новую строку
         container.appendChild(newHabitRow);
         const textarea = newHabitRow.querySelector('.habit-input');
         autoResizeTextarea(textarea);
         textarea.addEventListener('input', () => autoResizeTextarea(textarea));
-
-        // Возвращаем кнопку "+"
         container.appendChild(actionsDiv);
         updateRemoveButtons();
+        saveAllData();
     }
 
     function removeLastHabit() {
         const menu = document.querySelector('.popup-menu');
         menu.style.display = 'none'; // Скрываем меню
-
         if (habitCounter > 3) {
             const container = document.getElementById('habitsContainer');
             const lastRow = container.lastElementChild.previousElementSibling;
+            const habitId = lastRow.dataset.habitId;
+            localStorage.removeItem(`habit${habitId}`);
+            ['mon','tue','wed','thu','fri','sat','sun'].forEach(day => localStorage.removeItem(`habit${habitId}-${day}`));
             container.removeChild(lastRow);
             habitCounter--;
+            renumberHabits();
             updateRemoveButtons();
+            saveAllData();
         }
     }
 
+    function renumberHabits() {
+        const rows = document.querySelectorAll('#habitsContainer .habit-row');
+        rows.forEach((row, index) => {
+            const id = index + 1;
+            row.dataset.habitId = id;
+            const input = row.querySelector('.habit-input');
+            const oldId = input.id;
+            input.id = `habit${id}`;
+            input.placeholder = `Привычка ${id}`;
+            row.querySelectorAll('.day-checkbox').forEach(cb => {
+                const parts = cb.id.split('-');
+                cb.id = `${parts[0].split(/\d+/)[0]}${id}-${parts[1]}`;
+            });
+        });
+    }
+
     function updateRemoveButtons() {
-        const btn = document.getElementById('removeButton');
-        btn.disabled = habitCounter <= 3;
+        document.getElementById('removeButton').disabled = habitCounter <= 3;
     }
 
     function autoResizeTextarea(textarea) {
@@ -516,7 +497,6 @@
                 }
                 localStorage.removeItem(el.id);
             });
-
             setCurrentWeekDates();
         }
     }
@@ -534,6 +514,9 @@
     }
 
     function loadSavedData() {
+        const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 3;
+        habitCounter = storedHabitCount;
+
         document.querySelectorAll('[id]').forEach(el => {
             const savedValue = localStorage.getItem(el.id);
             if (savedValue !== null) {
@@ -546,38 +529,35 @@
             }
         });
 
-        const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 3;
-        habitCounter = storedHabitCount;
+        const container = document.getElementById('habitsContainer');
+        const actionsDiv = document.getElementById('habitActions');
 
         for (let i = 4; i <= storedHabitCount; i++) {
+            if (localStorage.getItem(`habit${i}`) === null) continue;
+
             const newHabitRow = document.createElement('div');
             newHabitRow.className = 'habit-row';
             newHabitRow.dataset.habitId = i;
-
             newHabitRow.innerHTML = `
-                <textarea class="habit-input" placeholder="Привычка ${i}" id="habit${i}"></textarea>
+                <textarea class="habit-input" placeholder="Привычка ${i}" id="habit${i}">${localStorage.getItem(`habit${i}`)}</textarea>
                 <div class="days-container">
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-mon"><span class="day-label">пн</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-tue"><span class="day-label">вт</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-wed"><span class="day-label">ср</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-thu"><span class="day-label">чт</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-fri"><span class="day-label">пт</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sat"><span class="day-label">сб</span></div>
-                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sun"><span class="day-label">вс</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-mon" ${localStorage.getItem(`habit${i}-mon`) === 'true' ? 'checked' : ''}><span class="day-label">пн</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-tue" ${localStorage.getItem(`habit${i}-tue`) === 'true' ? 'checked' : ''}><span class="day-label">вт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-wed" ${localStorage.getItem(`habit${i}-wed`) === 'true' ? 'checked' : ''}><span class="day-label">ср</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-thu" ${localStorage.getItem(`habit${i}-thu`) === 'true' ? 'checked' : ''}><span class="day-label">чт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-fri" ${localStorage.getItem(`habit${i}-fri`) === 'true' ? 'checked' : ''}><span class="day-label">пт</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sat" ${localStorage.getItem(`habit${i}-sat`) === 'true' ? 'checked' : ''}><span class="day-label">сб</span></div>
+                    <div class="day-wrapper"><input type="checkbox" class="day-checkbox" id="habit${i}-sun" ${localStorage.getItem(`habit${i}-sun`) === 'true' ? 'checked' : ''}><span class="day-label">вс</span></div>
                 </div>
             `;
-
-            const container = document.getElementById('habitsContainer');
-            const actionsDiv = document.getElementById('habitActions');
             container.removeChild(actionsDiv);
-
             container.appendChild(newHabitRow);
             const textarea = newHabitRow.querySelector('.habit-input');
             autoResizeTextarea(textarea);
             textarea.addEventListener('input', () => autoResizeTextarea(textarea));
-
             container.appendChild(actionsDiv);
         }
+
         updateRemoveButtons();
     }
 
@@ -601,6 +581,7 @@
         const buttons = document.querySelector('.action-buttons');
         const originalDisplay = buttons.style.display;
         buttons.style.display = 'none';
+
         const pages = [document.getElementById('page1'), document.getElementById('page2')];
         for (const page of pages) {
             await html2canvas(page, { scale: 2 }).then(canvas => {
@@ -610,6 +591,7 @@
                 link.click();
             });
         }
+
         buttons.style.display = originalDisplay;
     }
 
@@ -617,10 +599,8 @@
         setCurrentWeekDates();
         loadSavedData();
         setupAutoResize();
-
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', saveAllData));
         document.querySelectorAll('textarea, input[type="text"]').forEach(ta => ta.addEventListener('input', saveAllData));
-
         document.getElementById('saveData').addEventListener('click', saveAllData);
         document.getElementById('clearData').addEventListener('click', clearAllData);
         document.getElementById('printData').addEventListener('click', () => window.print());
