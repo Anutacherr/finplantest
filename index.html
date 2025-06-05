@@ -15,7 +15,7 @@
         }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f9f9f9; 
+            background-color: #f9f9f9;  
             color: #000;
             line-height: 1.4;
             padding: 10px;
@@ -27,11 +27,12 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 10px;
+            margin-bottom: 40px; /* Увеличенный отступ между страницами */
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             position: relative;
+            page-break-after: always; /* Визуальное разделение на страницы */
         }
         .header h1 {
             text-align: center;
@@ -61,6 +62,9 @@
             font-size: 16px;
             margin-bottom: 15px;
             letter-spacing: 1px;
+        }
+        .focus-section { /* Новый класс для отступа перед "Фокус недели" */
+            margin-top: 20px;
         }
         .habits-container {
             display: flex;
@@ -174,6 +178,7 @@
         }
         .goal-column {
             width: 32%;
+            margin-top: 20px; /* Отступ сверху у каждой цели */
         }
         .goal-input,
         .step-input,
@@ -232,41 +237,26 @@
             min-width: 120px;
             text-align: center;
         }
-        @media (max-width: 768px) {
-            .page {
-                transform: scale(0.6);
-                transform-origin: top left;
-                width: 166.66%;
-                margin-bottom: 10px;
-                padding: 10px;
-            }
-            .habit-input {
-                font-size: 12px;
-            }
-            .day-checkbox {
-                width: 16px;
-                height: 16px;
-            }
-            .day-label {
-                font-size: 9px;
-            }
-            .goal-input,
-            .step-input,
-            .large-input {
-                font-size: 12px;
-            }
+        /* Тост */
+        .toast {
+            visibility: hidden;
+            min-width: 160px;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 10px;
+            position: fixed;
+            z-index: 9999;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        @media print {
-            .action-buttons { display: none; }
-            .page {
-                page-break-after: always;
-                width: 210mm;
-                height: 297mm;
-                margin: 0 auto 20px;
-                padding: 20px;
-                box-shadow: none;
-                background: white;
-            }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
@@ -323,35 +313,36 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="goals-section">
-            <h2 class="section-title">ФОКУС НЕДЕЛИ</h2>
-            <p class="focus-question">На чем ты сконцентрируешься на этой неделе? Выбери три главные цели.</p>
-            <div class="goals-container">
-                <div class="goal-column">
-                    <textarea class="goal-input" placeholder="ЦЕЛЬ 1" id="goal1"></textarea>
-                    <p class="note">Этапы достижения</p>
-                    <textarea class="step-input" placeholder="○" id="goal1-step1"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal1-step2"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal1-step3"></textarea>
-                </div>
-                <div class="goal-column">
-                    <textarea class="goal-input" placeholder="ЦЕЛЬ 2" id="goal2"></textarea>
-                    <p class="note">Этапы достижения</p>
-                    <textarea class="step-input" placeholder="○" id="goal2-step1"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal2-step2"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal2-step3"></textarea>
-                </div>
-                <div class="goal-column">
-                    <textarea class="goal-input" placeholder="ЦЕЛЬ 3" id="goal3"></textarea>
-                    <p class="note">Этапы достижения</p>
-                    <textarea class="step-input" placeholder="○" id="goal3-step1"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal3-step2"></textarea>
-                    <textarea class="step-input" placeholder="○" id="goal3-step3"></textarea>
+            <div class="goals-section focus-section"> <!-- Здесь добавлен отступ -->
+                <h2 class="section-title">ФОКУС НЕДЕЛИ</h2>
+                <p class="focus-question">На чем ты сконцентрируешься на этой неделе? Выбери три главные цели.</p>
+                <div class="goals-container">
+                    <div class="goal-column">
+                        <textarea class="goal-input" placeholder="ЦЕЛЬ 1" id="goal1"></textarea>
+                        <p class="note">Этапы достижения</p>
+                        <textarea class="step-input" placeholder="○" id="goal1-step1"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal1-step2"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal1-step3"></textarea>
+                    </div>
+                    <div class="goal-column">
+                        <textarea class="goal-input" placeholder="ЦЕЛЬ 2" id="goal2"></textarea>
+                        <p class="note">Этапы достижения</p>
+                        <textarea class="step-input" placeholder="○" id="goal2-step1"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal2-step2"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal2-step3"></textarea>
+                    </div>
+                    <div class="goal-column">
+                        <textarea class="goal-input" placeholder="ЦЕЛЬ 3" id="goal3"></textarea>
+                        <p class="note">Этапы достижения</p>
+                        <textarea class="step-input" placeholder="○" id="goal3-step1"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal3-step2"></textarea>
+                        <textarea class="step-input" placeholder="○" id="goal3-step3"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Вторая страница -->
     <div class="page" id="page2">
         <h2 class="section-title">НАМЕРЕНИЕ:</h2>
@@ -382,9 +373,11 @@
     </div>
 </div>
 
+<!-- Тост -->
+<div id="toast" class="toast"></div>
+
 <script>
     let habitCounter = 3;
-
     function togglePopupMenu(button) {
         const menu = button.nextElementSibling;
         menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
@@ -422,6 +415,11 @@
         autoResizeTextarea(textarea);
         textarea.addEventListener('input', () => autoResizeTextarea(textarea));
         container.appendChild(actionsDiv);
+        // Добавляем обработчики автосохранения
+        newHabitRow.querySelectorAll('textarea, input[type="checkbox"]').forEach(el => {
+            el.addEventListener('input', saveAllData);
+            el.addEventListener('change', saveAllData);
+        });
         updateRemoveButtons();
         saveAllData();
     }
@@ -495,6 +493,7 @@
                 localStorage.removeItem(el.id);
             });
             setCurrentWeekDates();
+            showToast("Очищено");
         }
     }
 
@@ -513,7 +512,6 @@
     function loadSavedData() {
         const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 3;
         habitCounter = storedHabitCount;
-
         document.querySelectorAll('[id]').forEach(el => {
             const savedValue = localStorage.getItem(el.id);
             if (savedValue !== null) {
@@ -525,10 +523,8 @@
                 }
             }
         });
-
         const container = document.getElementById('habitsContainer');
         const actionsDiv = document.getElementById('habitActions');
-
         for (let i = 4; i <= storedHabitCount; i++) {
             if (localStorage.getItem(`habit${i}`) === null) continue;
             const newHabitRow = document.createElement('div');
@@ -551,9 +547,13 @@
             const textarea = newHabitRow.querySelector('.habit-input');
             autoResizeTextarea(textarea);
             textarea.addEventListener('input', () => autoResizeTextarea(textarea));
+            // Автосохранение для новых полей
+            newHabitRow.querySelectorAll('textarea, input[type="checkbox"]').forEach(el => {
+                el.addEventListener('input', saveAllData);
+                el.addEventListener('change', saveAllData);
+            });
             container.appendChild(actionsDiv);
         }
-
         updateRemoveButtons();
     }
 
@@ -593,14 +593,33 @@
         })();
     }
 
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show';
+        setTimeout(() => {
+            toast.className = 'toast';
+        }, 2000);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         setCurrentWeekDates();
         loadSavedData();
         setupAutoResize();
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', saveAllData));
-        document.querySelectorAll('textarea, input[type="text"]').forEach(ta => ta.addEventListener('input', saveAllData));
-        document.getElementById('saveData').addEventListener('click', saveAllData);
-        document.getElementById('clearData').addEventListener('click', clearAllData);
+        // Автосохранение для изначальных полей
+        document.querySelectorAll('input[type="checkbox"], textarea, input[type="text"]').forEach(el => {
+            el.addEventListener('input', saveAllData);
+            el.addEventListener('change', saveAllData);
+        });
+        // Уведомления на кнопки
+        document.getElementById('saveData').addEventListener('click', () => {
+            saveAllData();
+            showToast("Сохранено");
+        });
+        document.getElementById('clearData').addEventListener('click', () => {
+            clearAllData();
+            showToast("Очищено");
+        });
         document.getElementById('printData').addEventListener('click', () => window.print());
         document.getElementById('exportPDF').addEventListener('click', exportToPDF);
         document.getElementById('exportPNG').addEventListener('click', exportToPNG);
