@@ -30,7 +30,7 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -65,21 +65,18 @@
             margin-bottom: 15px;
             letter-spacing: 1px;
         }
-
         /* Стили для контейнера привычек */
         .habits-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .habit-row {
             display: flex;
             align-items: flex-start;
             position: relative;
-            padding-right: 40px; /* Освобождаем место для кнопки внутри области листа */
+            padding-right: 40px;
         }
-
         .habit-actions {
             position: absolute;
             right: 0;
@@ -89,7 +86,6 @@
             flex-direction: column;
             gap: 5px;
         }
-
         .add-button {
             background-color: rgba(0, 0, 0, 0.2);
             border: none;
@@ -105,14 +101,13 @@
             align-items: center;
             transition: background-color 0.3s ease;
         }
-
         .add-button:hover {
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .popup-menu {
             position: absolute;
-            right: -120px;
+            right: 30px;
+            left: auto;
             top: 30px;
             background: white;
             border: 1px solid #ccc;
@@ -123,7 +118,6 @@
             flex-direction: column;
             z-index: 20;
         }
-
         .popup-menu button {
             padding: 8px 12px;
             border: none;
@@ -132,11 +126,9 @@
             cursor: pointer;
             font-size: 14px;
         }
-
         .popup-menu button:hover {
             background-color: #f0f0f0;
         }
-
         .habit-input {
             width: 50%;
             min-height: 20px;
@@ -149,18 +141,15 @@
             background: transparent;
             overflow: hidden;
         }
-
         .days-container {
             width: 50%;
             display: flex;
             justify-content: space-between;
-            gap: 5px; /* Уменьшили расстояние между чекбоксами */
+            gap: 5px;
         }
-
         .day-wrapper {
             text-align: center;
         }
-
         .day-checkbox {
             appearance: none;
             -webkit-appearance: none;
@@ -170,7 +159,6 @@
             cursor: pointer;
             position: relative;
         }
-
         .day-checkbox:checked::after {
             content: "✓";
             color: #000;
@@ -180,22 +168,18 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
         .day-label {
             font-size: 10px;
             text-transform: lowercase;
         }
-
         .goals-container {
             display: flex;
             justify-content: space-between;
             gap: 10px;
         }
-
         .goal-column {
             width: 32%;
         }
-
         .goal-input,
         .step-input,
         .large-input {
@@ -210,34 +194,28 @@
             overflow: hidden;
             text-align: center;
         }
-
         .goal-input {
             min-height: calc(1em * 1.5 * 5);
         }
-
         .step-input {
             min-height: calc(1em * 1.5 * 3);
             border-bottom: 1px dashed #000;
             font-size: 13px;
         }
-
         .note {
             font-style: italic;
             font-size: 13px;
             margin-bottom: 5px;
         }
-
         .divider {
             border-top: 1px solid #000;
             margin: 20px 0;
         }
-
         .footer {
             text-align: center;
             font-size: 12px;
             margin-top: 30px;
         }
-
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -245,7 +223,6 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .action-button {
             padding: 10px 15px;
             background: #000;
@@ -266,6 +243,7 @@
                 transform: scale(0.6);
                 transform-origin: top left;
                 width: 166.66%;
+                margin-bottom: 50px;
             }
 
             .habit-input {
@@ -431,7 +409,9 @@
         `;
 
         container.appendChild(newHabitRow);
-        autoResizeTextarea(newHabitRow.querySelector('.habit-input'));
+        const textarea = newHabitRow.querySelector('.habit-input');
+        autoResizeTextarea(textarea);
+        textarea.addEventListener('input', () => autoResizeTextarea(textarea));
         updateRemoveButtons();
     }
 
@@ -492,7 +472,10 @@
                 'habit1', 'habit2', 'habit3',
                 'goal1', 'goal1-step1', 'goal1-step2', 'goal1-step3',
                 'goal2', 'goal2-step1', 'goal2-step2', 'goal2-step3',
-                'goal3', 'goal3-step1', 'goal3-step2', 'goal3-step3'
+                'goal3', 'goal3-step1', 'goal3-step2', 'goal3-step3',
+                'habit1-mon', 'habit1-tue', 'habit1-wed', 'habit1-thu', 'habit1-fri', 'habit1-sat', 'habit1-sun',
+                'habit2-mon', 'habit2-tue', 'habit2-wed', 'habit2-thu', 'habit2-fri', 'habit2-sat', 'habit2-sun',
+                'habit3-mon', 'habit3-tue', 'habit3-wed', 'habit3-thu', 'habit3-fri', 'habit3-sat', 'habit3-sun'
             ];
             elements.forEach(id => {
                 const element = document.getElementById(id);
@@ -502,10 +485,17 @@
                     } else {
                         element.value = '';
                         resetTextareaHeight(element);
+                        autoResizeTextarea(element);
                     }
                     localStorage.removeItem(id);
                 }
             });
+
+            // Также очищаем новые привычки, если они были добавлены
+            while (habitCounter > 1) {
+                removeLastHabit();
+            }
+
             setCurrentWeekDates();
         }
     }
@@ -552,7 +542,6 @@
             }
         });
 
-        // Восстанавливаем дополнительные привычки
         const storedHabitCount = parseInt(localStorage.getItem('habitCounter'), 10) || 1;
         for (let i = 2; i <= storedHabitCount; i++) {
             addNewHabit();
