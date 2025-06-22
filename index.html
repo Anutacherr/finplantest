@@ -29,7 +29,7 @@
         .page {
             width: 100%;
             min-height: fit-content;
-            margin-bottom: 10px; /* Уменьшено расстояние между листами */
+            margin-bottom: 2px;
             background: white;
             padding: 20px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -44,6 +44,7 @@
         .date-range {
             text-align: center;
             margin-bottom: 25px;
+            position: relative;
         }
         .date-input {
             border: none;
@@ -53,6 +54,65 @@
             width: 180px;
             background: transparent;
             padding: 5px 0;
+            cursor: pointer;
+        }
+        .date-picker {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            width: 250px;
+        }
+        .date-picker-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .date-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .date-picker-day {
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .date-picker-day:hover {
+            background-color: #f0f0f0;
+        }
+        .date-picker-day.selected {
+            background-color: #e0e0e0;
+        }
+        .date-picker-day.week-selected {
+            background-color: #d0e0ff;
+        }
+        .date-picker-day-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 5px;
+        }
+        .date-picker-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .date-picker-button {
+            padding: 5px 10px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
         }
         .habits-section {
             margin-bottom: 30px;
@@ -109,7 +169,7 @@
         }
         .day-checkbox:checked::after {
             content: "✓";
-            color: #000;
+            color: #28a745;
             font-size: 16px;
             position: absolute;
             top: 50%;
@@ -177,6 +237,7 @@
         }
         .goal-column {
             width: 32%;
+            position: relative;
         }
         .goal-input,
         .step-input,
@@ -197,13 +258,12 @@
         }
         .step-input {
             min-height: calc(1em * 1.5 * 3);
-            border-bottom: 1px dashed #000;
             font-size: 13px;
         }
         .note {
             font-style: italic;
             font-size: 13px;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
         .divider {
             border-top: 1px solid #000;
@@ -252,12 +312,121 @@
         .toast.show {
             opacity: 1;
         }
+        /* Стили для новых чекбоксов */
+        .goal-checkbox-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .goal-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border: 1.5px solid #000;
+            cursor: pointer;
+            position: relative;
+        }
+        .goal-checkbox.done:checked::after {
+            content: "✓";
+            color: #28a745;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .goal-checkbox.not-done:checked::after {
+            content: "✕";
+            color: #dc3545;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .goal-checkbox.done::before {
+            content: "✓";
+            color: #28a745;
+            font-size: 10px;
+            position: absolute;
+            bottom: -12px;
+            right: -5px;
+        }
+        .goal-checkbox.not-done::before {
+            content: "✕";
+            color: #dc3545;
+            font-size: 10px;
+            position: absolute;
+            bottom: -12px;
+            right: -5px;
+        }
+        .step-checkbox-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .step-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 1.5px solid #000;
+            cursor: pointer;
+            position: relative;
+        }
+        .step-checkbox.done:checked::after {
+            content: "✓";
+            color: #28a745;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .step-checkbox.not-done:checked::after {
+            content: "✕";
+            color: #dc3545;
+            font-size: 18px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .step-checkbox.done::before {
+            content: "✓";
+            color: #28a745;
+            font-size: 8px;
+            position: absolute;
+            bottom: -10px;
+            right: -5px;
+        }
+        .step-checkbox.not-done::before {
+            content: "✕";
+            color: #dc3545;
+            font-size: 8px;
+            position: absolute;
+            bottom: -10px;
+            right: -5px;
+        }
+        .focus-question {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .step-divider {
+            margin: 10px 0;
+        }
         @media (max-width: 768px) {
             .page {
                 transform: scale(0.6);
                 transform-origin: top left;
                 width: 166.66%;
-                margin-bottom: 2px; /* Минимальное расстояние между листами */
+                margin-bottom: 0;
                 padding: 10px;
             }
             .habit-input {
@@ -267,6 +436,10 @@
                 width: 16px;
                 height: 16px;
             }
+            .day-checkbox:checked::after {
+                color: #28a745;
+                font-size: 14px;
+            }
             .day-label {
                 font-size: 9px;
             }
@@ -275,6 +448,22 @@
             .large-input {
                 font-size: 12px;
             }
+            .goal-checkbox {
+                width: 24px;
+                height: 24px;
+            }
+            .goal-checkbox.done:checked::after,
+            .goal-checkbox.not-done:checked::after {
+                font-size: 18px;
+            }
+            .step-checkbox {
+                width: 18px;
+                height: 18px;
+            }
+            .step-checkbox.done:checked::after,
+            .step-checkbox.not-done:checked::after {
+                font-size: 14px;
+            }
         }
         @media print {
             .action-buttons { display: none; }
@@ -282,10 +471,13 @@
                 page-break-after: always;
                 width: 210mm;
                 height: 297mm;
-                margin: 0 auto 20px;
+                margin: 0 auto 2px;
                 padding: 20px;
                 box-shadow: none;
                 background: white;
+            }
+            .date-picker {
+                display: none !important;
             }
         }
     </style>
@@ -295,7 +487,26 @@
     <!-- Первая страница -->
     <div class="page" id="page1">
         <div class="header"><h1>ФИНАНСОВЫЙ ПЛАН НА НЕДЕЛЮ</h1></div>
-        <div class="date-range"><input type="text" class="date-input" id="dateRange" placeholder="дд.мм - дд.мм"></div>
+        <div class="date-range">
+            <input type="text" class="date-input" id="dateRange" placeholder="дд.мм - дд.мм" readonly>
+            <div class="date-picker" id="datePicker">
+                <div class="date-picker-header">Выберите неделю</div>
+                <div class="date-picker-grid" id="datePickerDaysHeader">
+                    <div class="date-picker-day-header">Пн</div>
+                    <div class="date-picker-day-header">Вт</div>
+                    <div class="date-picker-day-header">Ср</div>
+                    <div class="date-picker-day-header">Чт</div>
+                    <div class="date-picker-day-header">Пт</div>
+                    <div class="date-picker-day-header">Сб</div>
+                    <div class="date-picker-day-header">Вс</div>
+                </div>
+                <div class="date-picker-grid" id="datePickerDays"></div>
+                <div class="date-picker-actions">
+                    <button class="date-picker-button" id="datePickerCancel">Отмена</button>
+                    <button class="date-picker-button" id="datePickerSelect">Выбрать</button>
+                </div>
+            </div>
+        </div>
         <div class="habits-section">
             <h2 class="section-title">ТРЕКЕР ПРИВЫЧЕК</h2>
             <div class="habits-container" id="habitsContainer">
@@ -349,24 +560,75 @@
             <p class="focus-question">На чем ты сконцентрируешься на этой неделе? Выбери три главные цели.</p>
             <div class="goals-container">
                 <div class="goal-column">
+                    <div class="goal-checkbox-container">
+                        <input type="checkbox" class="goal-checkbox done" id="goal1-done">
+                        <input type="checkbox" class="goal-checkbox not-done" id="goal1-not-done">
+                    </div>
+                    <div class="step-divider"></div>
                     <textarea class="goal-input" placeholder="ЦЕЛЬ 1" id="goal1"></textarea>
                     <p class="note">Этапы достижения</p>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal1-step1-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal1-step1-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal1-step1"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal1-step2-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal1-step2-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal1-step2"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal1-step3-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal1-step3-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal1-step3"></textarea>
                 </div>
                 <div class="goal-column">
+                    <div class="goal-checkbox-container">
+                        <input type="checkbox" class="goal-checkbox done" id="goal2-done">
+                        <input type="checkbox" class="goal-checkbox not-done" id="goal2-not-done">
+                    </div>
+                    <div class="step-divider"></div>
                     <textarea class="goal-input" placeholder="ЦЕЛЬ 2" id="goal2"></textarea>
                     <p class="note">Этапы достижения</p>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal2-step1-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal2-step1-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal2-step1"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal2-step2-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal2-step2-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal2-step2"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal2-step3-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal2-step3-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal2-step3"></textarea>
                 </div>
                 <div class="goal-column">
+                    <div class="goal-checkbox-container">
+                        <input type="checkbox" class="goal-checkbox done" id="goal3-done">
+                        <input type="checkbox" class="goal-checkbox not-done" id="goal3-not-done">
+                    </div>
+                    <div class="step-divider"></div>
                     <textarea class="goal-input" placeholder="ЦЕЛЬ 3" id="goal3"></textarea>
                     <p class="note">Этапы достижения</p>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal3-step1-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal3-step1-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal3-step1"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal3-step2-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal3-step2-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal3-step2"></textarea>
+                    <div class="step-checkbox-container">
+                        <input type="checkbox" class="step-checkbox done" id="goal3-step3-done">
+                        <input type="checkbox" class="step-checkbox not-done" id="goal3-step3-not-done">
+                    </div>
                     <textarea class="step-input" placeholder="○" id="goal3-step3"></textarea>
                 </div>
             </div>
@@ -406,6 +668,8 @@
 
 <script>
     let habitCounter = 3;
+    let selectedWeekStart = null;
+    let selectedWeekEnd = null;
 
     function showToast(message) {
         const toast = document.getElementById('toast');
@@ -456,7 +720,6 @@
             saveAllData();
         });
         
-        // Добавляем обработчики для новых чекбоксов
         newHabitRow.querySelectorAll('.day-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', saveAllData);
         });
@@ -552,6 +815,8 @@
         sunday.setDate(monday.getDate() + 6);
         const formatDate = date => String(date.getDate()).padStart(2, '0') + '.' + String(date.getMonth() + 1).padStart(2, '0');
         document.getElementById('dateRange').value = `${formatDate(monday)} - ${formatDate(sunday)}`;
+        selectedWeekStart = monday;
+        selectedWeekEnd = sunday;
     }
 
     function loadSavedData() {
@@ -600,7 +865,6 @@
                 saveAllData();
             });
             
-            // Добавляем обработчики для загруженных чекбоксов
             newHabitRow.querySelectorAll('.day-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', saveAllData);
             });
@@ -609,6 +873,77 @@
         }
 
         updateRemoveButtons();
+    }
+
+    function renderCalendar() {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+        
+        const daysInMonth = lastDayOfMonth.getDate();
+        const startingDayOfWeek = firstDayOfMonth.getDay();
+        
+        const calendarDays = document.getElementById('datePickerDays');
+        calendarDays.innerHTML = '';
+        
+        // Пустые ячейки для дней предыдущего месяца
+        for (let i = 0; i < (startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1); i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.className = 'date-picker-day';
+            calendarDays.appendChild(emptyDay);
+        }
+        
+        // Дни текущего месяца
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = document.createElement('div');
+            day.className = 'date-picker-day';
+            day.textContent = i;
+            day.dataset.day = i;
+            day.dataset.month = currentMonth;
+            day.dataset.year = currentYear;
+            
+            const date = new Date(currentYear, currentMonth, i);
+            day.addEventListener('click', () => selectWeek(date));
+            
+            calendarDays.appendChild(day);
+        }
+    }
+
+    function selectWeek(date) {
+        const dayOfWeek = date.getDay(); // 0 - воскресенье
+        const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        const monday = new Date(date);
+        monday.setDate(date.getDate() + diffToMonday);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        
+        selectedWeekStart = monday;
+        selectedWeekEnd = sunday;
+        
+        // Сбросить выделение всех дней
+        document.querySelectorAll('.date-picker-day').forEach(day => {
+            day.classList.remove('week-selected');
+        });
+        
+        // Выделить выбранную неделю
+        for (let d = new Date(monday); d <= sunday; d.setDate(d.getDate() + 1)) {
+            const dayElement = document.querySelector(`.date-picker-day[data-day="${d.getDate()}"][data-month="${d.getMonth()}"][data-year="${d.getFullYear()}"]`);
+            if (dayElement) {
+                dayElement.classList.add('week-selected');
+            }
+        }
+    }
+
+    function confirmWeekSelection() {
+        if (selectedWeekStart && selectedWeekEnd) {
+            const formatDate = date => String(date.getDate()).padStart(2, '0') + '.' + String(date.getMonth() + 1).padStart(2, '0');
+            document.getElementById('dateRange').value = `${formatDate(selectedWeekStart)} - ${formatDate(selectedWeekEnd)}`;
+            document.getElementById('datePicker').style.display = 'none';
+            saveAllData();
+        }
     }
 
     async function exportToPDF() {
@@ -649,13 +984,40 @@
         setCurrentWeekDates();
         loadSavedData();
         setupAutoResize();
+        renderCalendar();
         
-        // Добавляем обработчики для всех чекбоксов
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('change', saveAllData);
+        // Обработчики для календаря
+        document.getElementById('dateRange').addEventListener('click', function() {
+            document.getElementById('datePicker').style.display = 'block';
         });
         
-        // Добавляем обработчики для всех текстовых полей
+        document.getElementById('datePickerSelect').addEventListener('click', confirmWeekSelection);
+        
+        document.getElementById('datePickerCancel').addEventListener('click', function() {
+            document.getElementById('datePicker').style.display = 'none';
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.date-picker') && !e.target.closest('.date-input')) {
+                document.getElementById('datePicker').style.display = 'none';
+            }
+        });
+        
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.classList.contains('done') || this.classList.contains('not-done')) {
+                    const prefix = this.id.split('-')[0];
+                    const type = this.classList.contains('done') ? 'done' : 'not-done';
+                    const oppositeType = type === 'done' ? 'not-done' : 'done';
+                    
+                    if (this.checked) {
+                        document.getElementById(`${prefix}-${oppositeType}`).checked = false;
+                    }
+                }
+                saveAllData();
+            });
+        });
+        
         document.querySelectorAll('textarea, input[type="text"]').forEach(ta => {
             ta.addEventListener('input', () => {
                 if (ta.tagName === 'TEXTAREA') autoResizeTextarea(ta);
